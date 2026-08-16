@@ -1,0 +1,6 @@
+# Mediciones generadas por los limnigrafos
+/limnigrafos/db/**/*.csv
+
+# Archivos compilados de Java
+*.class
+/target/
