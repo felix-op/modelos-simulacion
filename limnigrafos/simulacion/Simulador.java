@@ -168,7 +168,7 @@ public class Simulador {
                 : temperaturaManual;
 
         double densidadReal = modeloFisico.calcularDensidad(temperaturaReal);
-        double presionReal = modeloFisico.calcularPresion(nivelReal, densidadReal);
+        double presionReal = modeloFisico.calcularPresion(nivelReal, densidadReal, temperaturaReal);
         double temperaturaMedida = sensor.medirTemperatura(temperaturaReal);
         double presionMedida = sensor.medirPresion(presionReal);
         double densidadMedida = modeloFisico.calcularDensidad(temperaturaMedida);
