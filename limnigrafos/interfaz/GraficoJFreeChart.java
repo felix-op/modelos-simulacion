@@ -40,6 +40,8 @@ public class GraficoJFreeChart extends JPanel {
     };
 
     private final Map<String, TimeSeries> series;
+    private final JFreeChart grafico;
+    private final ChartPanel panelGrafico;
 
     public GraficoJFreeChart(
             String titulo,
@@ -52,7 +54,7 @@ public class GraficoJFreeChart extends JPanel {
         }
 
         setLayout(new BorderLayout());
-        setBackground(TemaOscuro.SUPERFICIE);
+        setBackground(TemaOscuro.superficie());
         series = new LinkedHashMap<>();
         TimeSeriesCollection conjuntoDatos = new TimeSeriesCollection();
 
@@ -63,7 +65,7 @@ public class GraficoJFreeChart extends JPanel {
             conjuntoDatos.addSeries(serie);
         }
 
-        JFreeChart grafico = ChartFactory.createTimeSeriesChart(
+        grafico = ChartFactory.createTimeSeriesChart(
                 titulo,
                 "Hora",
                 unidad,
@@ -72,14 +74,13 @@ public class GraficoJFreeChart extends JPanel {
                 true,
                 false);
 
-        configurarApariencia(grafico, minimo, maximo);
-
-        ChartPanel panelGrafico = new ChartPanel(grafico);
-        panelGrafico.setBackground(TemaOscuro.SUPERFICIE);
+        panelGrafico = new ChartPanel(grafico);
         panelGrafico.setMouseWheelEnabled(true);
         panelGrafico.setDomainZoomable(true);
         panelGrafico.setRangeZoomable(true);
         add(panelGrafico, BorderLayout.CENTER);
+        configurarApariencia(minimo, maximo);
+        TemaOscuro.alCambiar(() -> configurarApariencia(minimo, maximo));
     }
 
     public void agregarDato(String nombreSerie, LocalDateTime fechaHora, double valor) {
@@ -108,28 +109,30 @@ public class GraficoJFreeChart extends JPanel {
         }
     }
 
-    private void configurarApariencia(JFreeChart grafico, double minimo, double maximo) {
-        grafico.setBackgroundPaint(TemaOscuro.SUPERFICIE);
-        grafico.getTitle().setPaint(TemaOscuro.TEXTO);
+    private void configurarApariencia(double minimo, double maximo) {
+        setBackground(TemaOscuro.superficie());
+        panelGrafico.setBackground(TemaOscuro.superficie());
+        grafico.setBackgroundPaint(TemaOscuro.superficie());
+        grafico.getTitle().setPaint(TemaOscuro.texto());
         if (grafico.getLegend() != null) {
-            grafico.getLegend().setBackgroundPaint(TemaOscuro.SUPERFICIE);
-            grafico.getLegend().setItemPaint(TemaOscuro.TEXTO);
+            grafico.getLegend().setBackgroundPaint(TemaOscuro.superficie());
+            grafico.getLegend().setItemPaint(TemaOscuro.texto());
             grafico.getLegend().setFrame(BlockBorder.NONE);
         }
 
         XYPlot area = grafico.getXYPlot();
-        area.setBackgroundPaint(TemaOscuro.SUPERFICIE_SECUNDARIA);
-        area.setDomainGridlinePaint(TemaOscuro.BORDE);
-        area.setRangeGridlinePaint(TemaOscuro.BORDE);
-        area.setOutlinePaint(TemaOscuro.BORDE);
-        area.getRangeAxis().setLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
-        area.getRangeAxis().setTickLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
+        area.setBackgroundPaint(TemaOscuro.superficieSecundaria());
+        area.setDomainGridlinePaint(TemaOscuro.borde());
+        area.setRangeGridlinePaint(TemaOscuro.borde());
+        area.setOutlinePaint(TemaOscuro.borde());
+        area.getRangeAxis().setLabelPaint(TemaOscuro.textoSecundario());
+        area.getRangeAxis().setTickLabelPaint(TemaOscuro.textoSecundario());
 
         DateAxis ejeTiempo = (DateAxis) area.getDomainAxis();
         ejeTiempo.setDateFormatOverride(new java.text.SimpleDateFormat("HH:mm:ss"));
         ejeTiempo.setAutoRange(true);
-        ejeTiempo.setLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
-        ejeTiempo.setTickLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
+        ejeTiempo.setLabelPaint(TemaOscuro.textoSecundario());
+        ejeTiempo.setTickLabelPaint(TemaOscuro.textoSecundario());
 
         XYItemRenderer renderer = area.getRenderer();
         if (renderer instanceof XYLineAndShapeRenderer rendererLineas) {

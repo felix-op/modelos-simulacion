@@ -1,6 +1,5 @@
 package limnigrafos.interfaz;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,8 +7,8 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 
 public class GraficoTiempo extends JPanel {
 
@@ -34,13 +33,8 @@ public class GraficoTiempo extends JPanel {
 
         datos = new ArrayList<>();
 
-        setBackground(Color.WHITE);
-
-        setBorder(
-                BorderFactory.createLineBorder(
-                        Color.GRAY
-                )
-        );
+        actualizarEstilo();
+        TemaOscuro.alCambiar(this::actualizarEstilo);
     }
 
     public void agregarDato(double valor) {
@@ -92,7 +86,7 @@ public class GraficoTiempo extends JPanel {
         // TÍTULO
         // ==============================
 
-        g2.setColor(Color.BLACK);
+        g2.setColor(TemaOscuro.texto());
 
         g2.setFont(
                 new Font(
@@ -215,5 +209,11 @@ public class GraficoTiempo extends JPanel {
                 xFin - 5,
                 yFin + 20
         );
+    }
+
+    private void actualizarEstilo() {
+        setBackground(TemaOscuro.superficieSecundaria());
+        setBorder(BorderFactory.createLineBorder(TemaOscuro.borde()));
+        repaint();
     }
 }

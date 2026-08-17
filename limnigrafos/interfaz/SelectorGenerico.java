@@ -1,44 +1,32 @@
 package limnigrafos.interfaz;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class SelectorGenerico<T> extends JPanel {
+    private static final int ALTO = 58;
     private final JComboBox<T> comboBox;
 
     public SelectorGenerico(String titulo, T[] opciones, T valorInicial) {
         setLayout(new BorderLayout(0, 6));
-        setBorder(BorderFactory.createTitledBorder(titulo));
+        setBorder(crearBordeTitulo(titulo));
+        setOpaque(false);
+        setMinimumSize(new Dimension(0, ALTO));
+        setPreferredSize(new Dimension(0, ALTO));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, ALTO));
 
         comboBox = new JComboBox<>(opciones);
         comboBox.setSelectedItem(valorInicial);
-
-        comboBox.setUI(new BasicComboBoxUI()); 
-        comboBox.setBackground(TemaOscuro.SUPERFICIE_SECUNDARIA);
-        comboBox.setForeground(TemaOscuro.TEXTO);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
-
-        comboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public java.awt.Component getListCellRendererComponent(
-                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                
-                if (value != null) {
-                    setText(value.toString());
-                }
-                return this;
-            }
-        });
+        comboBox.putClientProperty("JComponent.roundRect", true);
 
         add(comboBox, BorderLayout.CENTER);
+        TemaOscuro.alCambiar(() -> {
+            setBorder(crearBordeTitulo(titulo));
+        });
     }
 
     public void alCambiarValor(Consumer<T> callback) {
@@ -47,5 +35,11 @@ public class SelectorGenerico<T> extends JPanel {
             T item = (T) comboBox.getSelectedItem();
             callback.accept(item);
         });
+    }
+
+    private static javax.swing.border.Border crearBordeTitulo(String titulo) {
+        return BorderFactory.createTitledBorder(
+                BorderFactory.createEmptyBorder(),
+                titulo);
     }
 }

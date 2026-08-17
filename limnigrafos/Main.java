@@ -15,8 +15,6 @@ import limnigrafos.simulacion.GeneradorSimulacion;
 import limnigrafos.simulacion.ModeloFisico;
 import limnigrafos.simulacion.Sensor;
 import limnigrafos.simulacion.Simulador;
-import limnigrafos.simulacion.entorno.Clima;
-import limnigrafos.simulacion.entorno.Estacion;
 
 public class Main {
     private static final String CODIGO_LIMNIGRAFO = "0xA10F2C";
@@ -42,7 +40,7 @@ public class Main {
         Simulador simulador = new Simulador(
                 new ModeloFisico(),
                 new GeneradorSimulacion(),
-                new Sensor(50.0, 0.1),
+                new Sensor(1.0, 0.01),
                 limnigrafo.getBateria());
         VentanaPrincipal ventana = new VentanaPrincipal(limnigrafo);
         
