@@ -2,7 +2,6 @@ package limnigrafos;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -21,15 +20,14 @@ public class Main {
     private static final String CODIGO_LIMNIGRAFO = "0xA10F2C";
 
     public static void main(String[] args) {
-        TemaOscuro.aplicar();
 
+        TemaOscuro.aplicar();
         try {
             RepositorioConfiguracionesLimnigrafos configuraciones =
                     new RepositorioConfiguracionesLimnigrafos();
             Limnigrafo limnigrafo = configuraciones.leer(CODIGO_LIMNIGRAFO)
                     .orElseThrow(() -> new IllegalStateException(
                             "No existe la configuracion del limnigrafo " + CODIGO_LIMNIGRAFO));
-
             SwingUtilities.invokeLater(() -> iniciarInterfaz(limnigrafo));
         } catch (IOException | RuntimeException exception) {
             mostrarErrorInicio(exception);
@@ -42,19 +40,21 @@ public class Main {
         Simulador simulador = new Simulador(
                 new ModeloFisico(),
                 new GeneradorSimulacion(),
-                new Sensor(50.0, 0.1),
+                new Sensor(1.0, 0.01),
                 limnigrafo.getBateria());
-
         VentanaPrincipal ventana = new VentanaPrincipal(limnigrafo);
+        
         ventana.configurarControles(
                 simulador::setNivelAutomatico,
                 simulador::setNivelManual,
                 simulador::setTemperaturaAutomatica,
                 simulador::setTemperaturaManual,
-                simulador::setBateria);
+                simulador::setBateria,
+                simulador::setEstacion,
+                simulador::setClima);
+                
         ventana.alCerrar(simulador::detener);
         ventana.mostrar();
-
         simulador.iniciar(
                 limnigrafo.getTiempoRecoleccionSegundos(),
                 limnigrafo.getTiempoEnvioSegundos(),

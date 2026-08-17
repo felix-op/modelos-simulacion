@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 
 import limnigrafos.modelos.Limnigrafo;
 import limnigrafos.simulacion.ResultadoSimulacion;
+import limnigrafos.simulacion.entorno.Clima;
+import limnigrafos.simulacion.entorno.Estacion;
 
 public class VentanaPrincipal extends Ventana {
     private static final double PASCALES_POR_HECTOPASCAL = 100.0;
@@ -26,8 +28,14 @@ public class VentanaPrincipal extends Ventana {
     private final GraficoJFreeChart graficoPresion;
     private final GraficoJFreeChart graficoTemperatura;
 
+    private final SelectorGenerico<Estacion> selectorEstacion;
+    private final SelectorGenerico<Clima> selectorClima;
+
     public VentanaPrincipal(Limnigrafo limnigrafo) {
         super("Simulador de Limnígrafo por Presión Hidrostática");
+
+        selectorEstacion = new SelectorGenerico<>("Estación", Estacion.values(), Estacion.PRIMAVERA);
+        selectorClima = new SelectorGenerico<>("Climatología", Clima.values(), Clima.SOLEADO);
 
         header = new Header(limnigrafo);
         controlNivel = new SliderControl("Nivel", "cm", 0, 150, 100, 50, 10);
@@ -59,7 +67,10 @@ public class VentanaPrincipal extends Ventana {
             DoubleConsumer alCambiarNivelManual,
             Consumer<Boolean> alCambiarTemperaturaAutomatica,
             DoubleConsumer alCambiarTemperaturaManual,
-            DoubleConsumer alCambiarBateria) {
+            DoubleConsumer alCambiarBateria,
+            Consumer<Estacion> alCambiarEstacion, Consumer<Clima> alCambiarClima) {
+        selectorEstacion.alCambiarValor(alCambiarEstacion);
+        selectorClima.alCambiarValor(alCambiarClima);
         controlNivel.alCambiarModo(alCambiarNivelAutomatico);
         controlNivel.alCambiarValor(alCambiarNivelManual);
         controlTemperatura.alCambiarModo(alCambiarTemperaturaAutomatica);
@@ -107,6 +118,10 @@ public class VentanaPrincipal extends Ventana {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
         panel.setPreferredSize(new Dimension(340, 0));
+        panel.add(selectorEstacion);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(selectorClima);
+        panel.add(Box.createVerticalStrut(20));
         panel.add(controlNivel);
         panel.add(Box.createVerticalStrut(20));
         panel.add(controlTemperatura);

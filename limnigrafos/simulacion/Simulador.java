@@ -168,7 +168,7 @@ public class Simulador {
                 : temperaturaManual;
 
         double densidadReal = modeloFisico.calcularDensidad(temperaturaReal);
-        double presionReal = modeloFisico.calcularPresion(nivelReal, densidadReal);
+        double presionReal = modeloFisico.calcularPresion(nivelReal, densidadReal, temperaturaReal);
         double temperaturaMedida = sensor.medirTemperatura(temperaturaReal);
         double presionMedida = sensor.medirPresion(presionReal);
         double densidadMedida = modeloFisico.calcularDensidad(temperaturaMedida);
@@ -215,5 +215,13 @@ public class Simulador {
             System.err.println("No se pudo " + operacion + ": " + exception.getMessage());
             return false;
         }
+    }
+
+    public void setEstacion(limnigrafos.simulacion.entorno.Estacion estacion) {
+        this.generador.setEstacion(estacion);
+    }
+
+    public void setClima(limnigrafos.simulacion.entorno.Clima clima) {
+        this.generador.setClima(clima);
     }
 }

@@ -1,6 +1,7 @@
 package limnigrafos.interfaz;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -38,6 +39,10 @@ public class Header extends JPanel {
         identificacion.add(titulo);
         identificacion.add(configuracion);
 
+        BotonCambiarTema botonCambiarTema = new BotonCambiarTema();
+        JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        acciones.add(botonCambiarTema);
+
         nivel = new Typography("Nivel: -- cm", Typography.Variante.DATO);
         temperatura = new Typography("Temperatura: -- °C", Typography.Variante.DATO);
         presion = new Typography("Presión: -- hPa", Typography.Variante.DATO);
@@ -55,6 +60,7 @@ public class Header extends JPanel {
 
         add(identificacion, BorderLayout.NORTH);
         add(datos, BorderLayout.CENTER);
+        add(acciones, BorderLayout.EAST);
     }
 
     public void actualizar(ResultadoSimulacion resultado) {

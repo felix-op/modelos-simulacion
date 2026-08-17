@@ -13,7 +13,6 @@ public class Ventana extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        getContentPane().setBackground(TemaOscuro.FONDO);
     }
 
     public void mostrar() {

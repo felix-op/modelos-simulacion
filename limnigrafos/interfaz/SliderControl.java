@@ -51,6 +51,7 @@ public class SliderControl extends JPanel {
         this.divisor = divisor;
         setLayout(new BorderLayout(0, 6));
         setBorder(BorderFactory.createTitledBorder(nombre));
+        setOpaque(false);
 
         automatico = new JCheckBox(nombre + " automático", permiteAutomatico);
         automatico.setVisible(permiteAutomatico);
@@ -77,6 +78,8 @@ public class SliderControl extends JPanel {
         }
         add(slider, BorderLayout.CENTER);
         add(valorActual, BorderLayout.SOUTH);
+
+        TemaOscuro.alCambiar(() -> setBorder(BorderFactory.createTitledBorder(nombre)));
     }
 
     public void alCambiarModo(Consumer<Boolean> callback) {
