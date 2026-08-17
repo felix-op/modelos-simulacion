@@ -24,6 +24,11 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.data.Range;
+
+import java.text.DecimalFormat;
 
 public class GraficoJFreeChart extends JPanel {
     private static final int MAXIMO_DATOS = 100;
@@ -90,12 +95,12 @@ public class GraficoJFreeChart extends JPanel {
         if (serie == null) {
             throw new IllegalArgumentException("No existe la serie: " + nombreSerie);
         }
-
         Runnable actualizacion = () -> {
             Date fecha = Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant());
             serie.addOrUpdate(new Millisecond(fecha), valor);
+            
+            ajustarEscalaDinamica(); 
         };
-
         if (SwingUtilities.isEventDispatchThread()) {
             actualizacion.run();
         } else {
@@ -117,7 +122,6 @@ public class GraficoJFreeChart extends JPanel {
         area.setDomainGridlinePaint(TemaOscuro.BORDE);
         area.setRangeGridlinePaint(TemaOscuro.BORDE);
         area.setOutlinePaint(TemaOscuro.BORDE);
-        area.getRangeAxis().setRange(minimo, maximo);
         area.getRangeAxis().setLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
         area.getRangeAxis().setTickLabelPaint(TemaOscuro.TEXTO_SECUNDARIO);
 
@@ -147,6 +151,38 @@ public class GraficoJFreeChart extends JPanel {
                             0.0f)
                     : new BasicStroke(2.4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             indice++;
+        }
+    }
+
+    private void ajustarEscalaDinamica() {
+        XYPlot area = (XYPlot) ((ChartPanel) getComponent(0)).getChart().getXYPlot();
+        NumberAxis ejeY = (NumberAxis) area.getRangeAxis();
+        
+        Range rango = area.getDataRange(ejeY);
+        if (rango != null) {
+            double min = rango.getLowerBound();
+            double max = rango.getUpperBound();
+            
+            if (min == max) {
+                min -= 1.0;
+                max += 1.0;
+            }
+            
+            double amplitud = max - min;
+            double margen = amplitud * 0.05;
+            
+            double minRango = min - margen;
+            double maxRango = max + margen;
+            
+            ejeY.setRange(minRango, maxRango);
+            
+            double separacionBruta = (maxRango - minRango) / 4.0;
+            
+            double separacion = Math.max(0.5, Math.ceil(separacionBruta * 2.0) / 2.0);
+            
+            ejeY.setNumberFormatOverride(new DecimalFormat("0.0"));
+            
+            ejeY.setTickUnit(new NumberTickUnit(separacion));
         }
     }
 }

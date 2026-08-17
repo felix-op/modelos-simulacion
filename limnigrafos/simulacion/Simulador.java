@@ -216,4 +216,12 @@ public class Simulador {
             return false;
         }
     }
+
+    public void setEstacion(limnigrafos.simulacion.entorno.Estacion estacion) {
+        this.generador.setEstacion(estacion);
+    }
+
+    public void setClima(limnigrafos.simulacion.entorno.Clima clima) {
+        this.generador.setClima(clima);
+    }
 }
