@@ -4,3 +4,6 @@
 # Archivos compilados de Java
 *.class
 /target/
+
+# Configuracion de IntelliJ IDEA
+/.idea/
