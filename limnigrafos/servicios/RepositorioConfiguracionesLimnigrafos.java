@@ -120,6 +120,9 @@ public class RepositorioConfiguracionesLimnigrafos {
         writer.newLine();
     }
 
+    // Escapa a mano en vez de usar Properties.store() para poder controlar
+    // el formato exacto del archivo (una propiedad por línea, sin el
+    // timestamp/comentario que Properties.store() agrega automáticamente).
     private String escaparValor(String valor) {
         return valor
                 .replace("\\", "\\\\")
@@ -134,6 +137,10 @@ public class RepositorioConfiguracionesLimnigrafos {
         return directorioConfiguraciones.resolve(codigoLimnigrafo + ".properties");
     }
 
+    // El código se usa directamente para armar el nombre del archivo
+    // (obtenerArchivo). Restringirlo a este alfabeto evita que un código con
+    // "/", ".." u otros separadores de ruta escriba o lea fuera del
+    // directorio de configuraciones.
     private void validarCodigo(String codigoLimnigrafo) {
         if (codigoLimnigrafo == null || !codigoLimnigrafo.matches("[A-Za-z0-9_-]+")) {
             throw new IllegalArgumentException(

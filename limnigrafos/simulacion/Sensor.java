@@ -2,12 +2,15 @@ package limnigrafos.simulacion;
 
 import java.util.Random;
 
+// Simula el sensor físico: toma un valor "real" (calculado por ModeloFisico
+// o generado por GeneradorSimulacion) y le agrega el ruido de medición que
+// tendría el hardware real, salvo que el valor sea un código de falla.
 public class Sensor {
     private final Random random;
     private final double desviacionPresion;
     private final double desviacionTemperatura;
-    
-    // del código del firmware
+
+    // cuando no responde o falla (ver errorAction() en limnigrafo-firmware.ino).
     private static final double CODIGO_ERROR_HARDWARE = -1000.0;
 
     public Sensor() {
@@ -28,8 +31,9 @@ public class Sensor {
     }
 
     public double medirPresion(double presionReal) {
-        // Interceptamos la señal de error del microcontrolador y
-        // el sensor arroja el código de error nativo del microcontrolador.
+        // Un código de falla no es una medición: si le sumáramos ruido
+        // gaussiano dejaría de ser reconocible como error más abajo en la
+        // cadena (ModeloFisico.calcularNivel), así que se propaga intacto.
         if (presionReal == CODIGO_ERROR_HARDWARE) {
             return CODIGO_ERROR_HARDWARE;
         }
@@ -37,6 +41,8 @@ public class Sensor {
     }
 
     public double medirTemperatura(double temperaturaReal) {
+        // La temperatura nunca es un código de error (solo la presión lo es),
+        // por eso acá el ruido gaussiano se aplica siempre.
         return temperaturaReal + random.nextGaussian() * desviacionTemperatura;
     }
 }

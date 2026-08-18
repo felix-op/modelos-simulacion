@@ -36,6 +36,9 @@ public class RepositorioMedicionesCsv {
 
         Files.createDirectories(directorioMediciones);
         Path archivo = obtenerArchivo(codigoLimnigrafo);
+        // El encabezado solo se escribe la primera vez que se crea el CSV de
+        // este limnígrafo; las escrituras siguientes son APPEND puro para no
+        // tener que reabrir/reescribir el archivo completo en cada medición.
         boolean escribirEncabezado = Files.notExists(archivo) || Files.size(archivo) == 0;
 
         try (BufferedWriter writer = Files.newBufferedWriter(
@@ -120,6 +123,9 @@ public class RepositorioMedicionesCsv {
         return directorioMediciones.resolve(codigoLimnigrafo + "-mediciones.csv");
     }
 
+    // Mismo motivo que en RepositorioConfiguracionesLimnigrafos: el código
+    // termina siendo parte del nombre de archivo (obtenerArchivo), así que
+    // se restringe el alfabeto para no permitir traversal de directorios.
     private void validarCodigo(String codigoLimnigrafo) {
         if (codigoLimnigrafo == null || !codigoLimnigrafo.matches("[A-Za-z0-9_-]+")) {
             throw new IllegalArgumentException(

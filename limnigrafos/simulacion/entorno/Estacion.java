@@ -1,5 +1,7 @@
 package limnigrafos.simulacion.entorno;
 
+// Temperatura base y amplitud térmica diaria de cada estación del año,
+// usadas por GeneradorSimulacion junto con el Clima actual.
 public enum Estacion {
     INVIERNO("Invierno", 1.0, 3.0),
     OTONO("Otoño", 5.0, 4.0),

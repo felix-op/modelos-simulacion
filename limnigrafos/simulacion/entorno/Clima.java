@@ -1,5 +1,9 @@
 package limnigrafos.simulacion.entorno;
 
+// Parámetros que usa GeneradorSimulacion para sintetizar nivel y temperatura
+// del río. nivelBase/amplitudNivel/velocidadCambio a mayor climas más severos
+// (más agua, más oscilación y más rápido); modTemp se suma a la temperatura
+// base de la Estacion actual.
 public enum Clima {
     SOLEADO("Soleado", 2.0, 45.0, 10.0, 0.005),     // Calienta un poco, río bajo y calmo
     NUBLADO("Nublado", -1.0, 50.0, 15.0, 0.008),    // Enfría un poco, río normal
